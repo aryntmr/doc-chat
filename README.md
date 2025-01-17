@@ -15,7 +15,7 @@ Doc Chat Bot is a Streamlit-based application that allows users to upload PDF do
 
 ## Repository Link
 
-The project repository can be accessed at [Doc Chat Bot Repository](https://github.com/your-repo-name/doc-chat-bot).
+The project repository can be accessed at [Doc Chat Bot Repository](https://github.com/aryntmr/doc-chat).
 
 ## Installation
 
