@@ -6,3 +6,4 @@ sentence-transformers
 python-dotenv
 openai
 pymupdf
+pdfminer.six
