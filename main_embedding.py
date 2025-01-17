@@ -16,9 +16,10 @@ from langchain.embeddings import HuggingFaceBgeEmbeddings
 from langchain.document_loaders import PyPDFLoader, TextLoader
 from langchain.prompts import PromptTemplate
 from langchain.chains.conversation.memory import ConversationBufferMemory
+import streamlit as st
 
 load_dotenv()
-OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 class chat_gen():
     def __init__(self):
