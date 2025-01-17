@@ -19,26 +19,36 @@ from langchain.chains.conversation.memory import ConversationBufferMemory
 import streamlit as st
 
 load_dotenv()
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"] or st.secrets.get("OPENAI_API_KEY")
+import tempfile
 
 class chat_gen():
     def __init__(self):
         self.chat_history=[]
     
-    #loading document
-    def load_doc(self,document_path):
-        #loading the document
-        loader=PyPDFLoader(document_path)
+    # loading document
+    def load_doc(self,uploaded_file):
+        # Check if uploaded_file is a Streamlit UploadedFile object
+        if hasattr(uploaded_file, "read"):
+            # Save the uploaded file to a temporary location
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+                temp_file.write(uploaded_file.read())
+                temp_file_path = temp_file.name
+        else:
+            # Assume uploaded_file is a file path
+            temp_file_path = uploaded_file
+
+        # loading the document
+        loader=PyPDFLoader(temp_file_path)
         documents=loader.load()
-        #creating the splitter class object and using it to split the documents in docs
+
+        # creating the splitter class object and using it to split the documents in docs
         text_splitter=CharacterTextSplitter(chunk_size=1000, chunk_overlap=30, separator="\n")
         docs=text_splitter.split_documents(documents=documents)
-        #creating embeddings, using vectordatabase and storing them locally, then loading from local
+
+        # creating embeddings, using vectordatabase and storing them locally, then loading from local
         embeddings=HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
-        vectorstore=FAISS.from_documents(docs,embeddings)
-        vectorstore.save_local("faiss_index_datamodel")
-        persisted_vectorstore=FAISS.load_local("faiss_index_datamodel",embeddings,allow_dangerous_deserialization=True)
-        return persisted_vectorstore
+        self.vectorstore = FAISS.from_documents(docs, embeddings)
 
     def load_model(self,):
         llm=ChatOpenAI(
@@ -57,18 +67,14 @@ class chat_gen():
             "Follow up question:{question}"
         )
         prompt=PromptTemplate.from_template(template)
+
         chain = ConversationalRetrievalChain.from_llm(
             llm=llm,
-            retriever=self.load_doc(r"C:\Users\arynt\OneDrive\Desktop\YeAI\research papers\A New Audio Approach Based on User Preferences Analysis to Enhance Music.pdf").as_retriever(),
+            retriever=self.vectorstore.as_retriever(),
             combine_docs_chain_kwargs={'prompt': prompt},
             chain_type="stuff",
         )
-        # retriever=self.load_doc(r"C:\Users\arynt\OneDrive\Desktop\YeAI\research papers\A New Audio Approach Based on User Preferences Analysis to Enhance Music.pdf").as_retriever()
-        # combine_docs_chain = create_stuff_documents_chain(llm, prompt)
-        # chain = create_retrieval_chain(retriever, combine_docs_chain)
-        # # chain = create_history_aware_retriever(
-        # #     llm, retriever, combine_docs_chain
-        # # )
+
         return chain
     
     def ask_pdf(self,query):
