@@ -13,6 +13,10 @@ Doc Chat Bot is a Streamlit-based application that allows users to upload PDF do
 
 ---
 
+## Repository Link
+
+The project repository can be accessed at [Doc Chat Bot Repository](https://github.com/your-repo-name/doc-chat-bot).
+
 ## Installation
 
 ### Prerequisites
@@ -72,6 +76,8 @@ Doc Chat Bot is a Streamlit-based application that allows users to upload PDF do
 4. Add your OpenAI API key to the **Secrets** section in the app settings.
 5. Deploy and test your app.
 
+### Live App
+You can access the live app at [Doc Chat Bot](https://doc-chat-c2jkgocfvtshgsc8vpsuet.streamlit.app).
 ---
 
 ## Dependencies
@@ -82,7 +88,6 @@ The application relies on the following key libraries:
 - `sentence-transformers`: For generating high-quality embeddings.
 - `pymupdf`: For parsing PDF files.
 - `pdfminer.six`: For additional PDF processing capabilities.
-- `pymupdf`: For parsing PDF files.
 - `python-dotenv`: For managing environment variables.
 - `openai`: For accessing OpenAI GPT models.
 
