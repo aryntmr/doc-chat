@@ -119,8 +119,3 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - [LangChain](https://www.langchain.com/) for document and language model integration.
 - [OpenAI](https://openai.com/) for GPT models.
 
----
-
-## Contact
-For issues or questions, please open an issue in the GitHub repository or contact the maintainer at `your-email@example.com`.
-
